@@ -1,0 +1,79 @@
+#!/bin/bash
+
+set -e
+
+self_test () {
+    cmd=`head -n1 $1`
+    echo "$cmd"
+    tmp_file=`mktemp`
+    echo "$cmd" > $tmp_file
+    echo "=====================================================================" >> $tmp_file
+    bash -c "$cmd" >> $tmp_file && diff $1 $tmp_file
+}
+
+SUCCESSES_NUM=0
+FAILURES_NUM=0
+
+
+FAILURES=()
+
+run_test () {
+    echo -e "Running: $@"
+
+    if $@ ; then
+        echo -e "\033[32msuccess\033[0m\n"
+        SUCCESSES_NUM=$(($SUCCESSES_NUM+1))
+    else
+        echo -e "\033[31mfail\033[0m (with exit code $?)\n"
+        FAILURES_NUM=$(($FAILURES_NUM+1))
+        FAILURES+=("$@")
+    fi
+}
+
+# exit on ctrl+c
+trap "exit 4" INT
+
+# make sure solution is up to date
+echo "Updating solution..."
+make
+echo
+
+# close fds which are guaranteed to be closed
+for i in {20..1023}
+do
+    eval "exec $i<&-"
+done
+
+# invoke all self tests
+for file in tests/*.self  tests/*/*.self
+do
+    if [ -e "$file" ] ; then 
+        run_test self_test $file
+    fi
+done
+
+# invoke all shell tests
+for file in tests/*.sh tests/*/*.sh
+do
+    if [ -e "$file" ] ; then 
+        run_test $file
+    fi
+done
+
+TOTAL_NUM=$(($FAILURES_NUM+$SUCCESSES_NUM))
+echo -e "\n$TOTAL_NUM tests in total, from which"
+if (($FAILURES_NUM == 0)) ; then
+    echo -e "\e[92m$SUCCESSES_NUM succeeded\e[39m and"
+    echo -e "$FAILURES_NUM failed."
+else
+    echo -e "$SUCCESSES_NUM succeeded and"
+    echo -e "\e[91m$FAILURES_NUM failed\e[39m."
+    echo
+    echo -e "\e[91mFailures:"
+    for failed in ${FAILURES[*]}; do
+        if [ $failed != "self_test" ] ; then
+            echo $failed
+        fi
+    done
+    echo -e "\e[39m"
+fi
