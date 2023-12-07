@@ -4,17 +4,18 @@ set -e
 # prepare exported solution
 make assignment.zip
 
-# reset public_repo folder to known state (specified by template hash)
-if [ -e "public_repo" ] ; then
-    cd public_repo
-    git fetch
-    git clean -fd
-    git reset --hard `cat ../template_hash`
-else
-    git clone https://github.com/baktrius/MIMUW_PW_2nd_lab_assignment public_repo
-    cd public_repo
-    git checkout `cat ../template_hash`
+# check if public repo is available
+if [ ! -e "public_repo" ] ; then
+    echo "Reference public repository seems to be missing!"
+    echo "Automatically fetch it using './update_public_repo'"
+    echo "or manually place it under 'public_repo/' folder."
+    exit 1
 fi
+
+# reset public_repo folder to known state (specified by template hash)
+cd public_repo
+git clean -fd
+git reset --hard `cat ../template_hash`
 
 # extract solution
 unzip ../assignment.zip -d assignment

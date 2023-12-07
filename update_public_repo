@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+
+# reset public_repo folder to known state (specified by template hash)
+if [ -e "public_repo" ] ; then
+    # update public repo if it exists
+    cd public_repo
+    git fetch
+else
+    # clone public repo if it doesn't exist
+    git clone https://github.com/baktrius/MIMUW_PW_2nd_lab_assignment public_repo
+fi
