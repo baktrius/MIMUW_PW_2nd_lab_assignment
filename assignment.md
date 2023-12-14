@@ -153,7 +153,7 @@ Dodatkowo aby implementacja została uznana za efektywną przesyłane dane nie p
 opatrzone za dużą liczbą metadanych.
 W szczególności oczekujemy, że funkcje grupowe wywołane dla danych wielkości
 mniejszej niż 256 bajtów będą wywoływać `chsend` i `chrecv` na rzecz pakietów
-wielkości mniejszej niż 512 bajtów.
+wielkości mniejszej lub równej niż 512 bajtów.
 
 Testy z katalogu `tests/effectiveness` dołączone w paczce sprawdzają powyżej zdefiniowane pojęcie efektywności.
 Przejście ich pozytywnie jest warunkiem koniecznym (choć niekoniecznie wystarczającym)
@@ -223,18 +223,17 @@ Biblioteka `channel.h` zapewnia następujące funkcje do obsługi kanałów:
 - `int chsend(int __fd, const void *__buf, size_t __n)` - wysłanie wiadomości
 - `int chrecv(int __fd, void *__buf, size_t __nbytes)` - odebranie wiadomości
 
-`channel`, `chsend`, `chrecv` działają tak jak `pipe`, `write` i `read` odpowiednio.
+`channel`, `chsend`, `chrecv` działają podobnie do `pipe`, `write` i `read` odpowiednio.
+Zamysł jest taki, że jedyna istotna (z perspektywy rozwiązania zadania)
+różnica w zachowaniu funkcji zapewnionych przez `channel.h` jest
+taka, że mogą one mieć znacząco dłuższy czas wykonania od swoich oryginałów.
 W szczególności zapewnione funkcje:
 
 - posiadają taką samą sygnaturę jak oryginalne funkcje
 - podobnie tworzą wpisy w tablicy otwartych plików
-- mają te same co `pipe` gwarancje dotyczące atomowości odczytów i zapisów poniżej 512 bajtów
-- mają te same co `pipe` gwarancje dotyczące wielkości bufora (przynajmniej 4 KB)
+- gwarantują atomowość odczytów i zapisów do 512 bajtów włącznie
+- gwarantują posiadanie bufora o wielkości przynajmniej 4 KB
 - ... _(w razie niejasności należy zadać pytanie)_
-
-Zamysł jest taki, że jedyna istotna (z perspektywy rozwiązania zadania)
-różnica w zachowaniu funkcji zapewnionych przez `channel.h` jest
-taka, że mogą one mieć znacząco dłuższy czas wykonania od swoich oryginałów.
 
 **UWAGA:**
 Należy koniecznie wywołać następujące funkcje pomocnicze: `channels_init` z `MIMPI_Init`,
