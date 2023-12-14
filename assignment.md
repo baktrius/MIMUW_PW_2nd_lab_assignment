@@ -80,7 +80,10 @@ Należy zaimplementować następujące procedury o sygnaturach z pliku nagłówk
   Wysyła dane spod adresu `data`, interpretując je jako tablicę bajtów o wielkości `count`,
   do procesu o randze `destination`, opatrując wiadomość znacznikiem `tag`.
 
-  Wykonanie `MIMPI_Send` na rzecz procesu, który już opuścił _blok MPI_ powinno kończyć się natychmiastowym niepowodzeniem.
+  Wykonanie `MIMPI_Send` na rzecz procesu, który już opuścił _blok MPI_ powinno
+  zakończyć się natychmiastowym niepowodzeniem zwracając kod błędu `MIMPI_ERROR_REMOTE_FINISHED`.
+  Nie należy przejmować się sytuacją, w której proces na rzecz którego wykonane zostało
+  `MIMPI_Send` zakończy działanie później (po pomyślnym zakończeniu funkcji `MIMPI_send` w procesie wysyłającym).
 
 - `MIMPI_Retcode MIMPI_Recv(void *data, int count, int source, int tag)`
 
@@ -88,6 +91,12 @@ Należy zaimplementować następujące procedury o sygnaturach z pliku nagłówk
   o randze `rank` i zapisuje jej zawartość pod adresem `data`
   (w gestii wołającego jest zapewnienie odpowiedniej ilości zaalokowanej pamięci).
   Wywołanie jest blokujące, tzn. kończy się dopiero po otrzymaniu całej wiadomości.
+
+  Wykonanie `MIMPI_Recv` na rzecz procesu, który
+  nie wysłał pasującej wiadomości i opuścił już _blok MPI_ powinno
+  zakończyć się niepowodzeniem zwracając kod błędu `MIMPI_ERROR_REMOTE_FINISHED`.
+  Podobne zachowanie jest oczekiwane nawet w sytuacji gdy drugi proces opuści _blok MPI_
+  już podczas czekania na `MIMPI_Recv`.
 
   - Wersja podstawowa: można zakładać, że każdy z procesów wysyła komunikaty w dokładnie takiej kolejności,
     w jakiej odbiorca chce je odbierać. **Nie można** natomiast zakładać, że wiele procesów **nie wyśle** równocześnie wiadomości do jednego odbiorcy. Można zakładać, że dane powiązane z jedną wiadomością są nie większe niż 512 bajtów.
