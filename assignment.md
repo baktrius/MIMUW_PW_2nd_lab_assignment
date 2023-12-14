@@ -14,8 +14,10 @@ Należy napisać według poniższej specyfikacji zarówno:
 
 Program `mimpirun` przyjmuje następujące argumenty linii poleceń:
 
-1) $n$ - liczba kopii do uruchomienia (można założyć, że jest nie większa od $16$)
-2) $prog$ - ścieżka do pliku wykonywalnego (może się znajdować w PATH)
+1) $n$ - liczba kopii do uruchomienia (można założyć, że przekazana zostanie liczba naturalna z zakresu od 1 do $16$ włącznie)
+2) $prog$ - ścieżka do pliku wykonywalnego (może się znajdować w PATH).
+   W przypadku, gdy odpowiednie wywołanie `exec` się nie powiedzie (np. z powodu niepoprawnej ścieżki)
+   należy zakończyć działanie `mimpirun` z niezerowym kodem wyjściowym.
 3) $args$ - opcjonalnie i w dowolnej ilości argumenty do przekazania wszystkim uruchamianym programom $prog$
 
 Program `mimpirun` po kolei (następna czynność jest rozpoczynana po całkowitym zakończeniu poprzedniej):
@@ -36,6 +38,7 @@ celem komunikacji z innymi procesami $prog$.
 - Mogą wykonywać dowolne operacje (zapis, odczyt, otwarcie, zamknięcie, itp.) na plikach,
   których numery deskryptorów są z zakresów $[0,19]$ i $[1024, \infty)$
   (w szczególności na `STDIN`, `STDOUT` i `STDERR`).
+- Nie modyfikują wartości zmiennych środowiskowych zaczynających się od prefiksu `MIMPI`.
 - Oczekują prawidłowo ustawionych argumentów,
 tzn. zerowy argument zgodnie z uniksową konwencją powinien być nazwą programu $prog$,
 natomiast następne argumenty powinny odpowiadać argumentom $args$.
@@ -117,14 +120,19 @@ Należy zaimplementować następujące procedury o sygnaturach z pliku nagłówk
     sytuacja, w których zakleszczenie jest spowodowane stanem dwóch procesów
     (rozważając czy można je przerwać dopuszczamy dowolne akcje procesów spoza pary - nawet takie, które nie są dozwolone w ich bieżącym stanie).
 
-    W ramach tego usprawnienia należy zaimplementować wykrywanie zakleszczeń par.
-
     Przykłady pewnych sytuacji będącymi zakleszczeniami par procesów w naszym systemie to:
-    - para procesów wykonała wzajemnie na siebie `MIMPI_Recv` nie wysyłając uprzednio z użyciem `MIMPI_Send` wiadomości, która może zakończyć czekanie któregokolwiek z nich
-    - jeden z procesów czeka na wiadomość od procesu,
+    1) para procesów wykonała wzajemnie na siebie `MIMPI_Recv` nie wysyłając uprzednio z użyciem `MIMPI_Send` wiadomości, która może zakończyć czekanie któregokolwiek z nich
+    2) jeden z procesów czeka na wiadomość od procesu,
     który czeka już na synchronizację związaną z wywołaniem procedury do komunikacji grupowej
 
-    W przypadku wykrycia zakleszczenia aktywne wywołanie funkcji bibliotecznej (`MIMPI_Recv` lub jednej z procedury do komunikacji grupowej) w **obu procesach** wykrytego zakleszczenia pary powinno natychmiast się zakończyć zwracając kod błędu `MIMPI_ERROR_DEADLOCK_DETECTED`.
+    W ramach tego usprawnienia należy zaimplementować przynajmniej wykrywanie zakleszczeń par typu 1).
+    Wykrywanie zakleszczeń innych typów nie będzie sprawdzane (można je zaimplementować).
+    Nie należy natomiast zgłaszać zakleszczeń w sytuacjach, które zakleszczeniami nie są.
+
+    W przypadku wykrycia zakleszczenia aktywne wywołanie funkcji bibliotecznej `MIMPI_Recv` w **obu procesach** wykrytego zakleszczenia pary powinno natychmiast się zakończyć zwracając kod błędu `MIMPI_ERROR_DEADLOCK_DETECTED`.
+
+    W przypadku wystąpienia wielu zakleszczonych par jednocześnie należy przerwać wywołanie funkcji bibliotecznej `MIMPI_Recv`
+    w każdym procesie każdej zakleszczonej pary.
 
     Detekcja zakleszczeń może do działania wymagać wysyłania wielu pomocniczych komunikatów, co może istotnie spowalniać działanie systemu.
     Dlatego funkcjonalność tę można włączać i wyłączać na czas działania całego _bloku MPI_ ustawiając odpowiednią wartość flagi `enable_deadlock detection` w wywołaniu `MIMPI_Init` rozpoczynającym ten blok.
@@ -280,9 +288,13 @@ Implementacje muszą poprawnie obsługiwać taką sytuację.
   - Należy czekać **wyłącznie** na wydarzenia niezależne od czasu np. pojawienie się wiadomości.
 - Rozwiązania będą testowane pod kątem wycieków pamięci i/lub innych zasobów (niezamkniętych plików itd.).
   Należy uważnie prześledzić i przetestować ścieżki mogące prowadzić do wycieków.
-- Można założyć, że nie dochodzi do sytuacji, w której różne procesy procesy wołają w tym samym czasie
-  różne procedury komunikacji grupowej
-  (tzn. nie jest dozwolone aby $i$-te wywołania funkcji do komunikacji grupowej w różnych procesach były różnego typu).
+- Można założyć, że odpowiadające i-te wywołania funkcji do komunikacji grupowej
+  w różnych procesach są tych samych typów (są to te same funkcje) i mają takie same wartości parametrów `count`, `root` i `op`
+  (jeśli bieżący typ funkcji posiada dany parametr).
+- W przypadku błędu w funkcji systemowej należy zakończyć wywołujący ją program z niezerowym kodem wyjściowym np.
+  poprzez użycie dostarczonego makra `ASSERT_SYS_OK`.
+- W przypadku, gdy programy $prog$ korzystają z biblioteki w sposób niezgodny z wymienionymi w tej treści gwarancjami,
+  można postąpić dowolnie (nie będziemy takich sytuacji sprawdzać).
 
 ### biblioteka `MIMPI`
 
