@@ -19,7 +19,7 @@ int main(int argc, char **argv)
         
         ASSERT_MIMPI_OK(MIMPI_Send(data, sizeof(data), 1, tag));
         for (int i = 0; i < sizeof(data); i += 789) {
-            assert(data[789] == 42);
+            assert(data[i] == 42);
         }
         ASSERT_MIMPI_OK(MIMPI_Barrier());
     }
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
         ASSERT_MIMPI_OK(MIMPI_Barrier());
         ASSERT_MIMPI_OK(MIMPI_Recv(data, sizeof(data), 0, tag));
         for (int i = 0; i < sizeof(data); i += 789) {
-            assert(data[789] == 42);
+            assert(data[i] == 42);
         }
     } else {
         ASSERT_MIMPI_OK(MIMPI_Barrier());
