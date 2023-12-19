@@ -7,7 +7,7 @@ Pozytywne przejście tych testów
 jest warunkiem koniecznym dostania niezerowej liczby punktów za implementację efektywnych funkcji komunikacji grupowej,
 więc sprawdzane wymagania są dwa razy mniejsze niż wynikałoby to z treści.
 Dozwolone czasy wykonania (limit `timeout`) zapewnionych testów wynika
-z formuły z treści $3\left \lceil\log_2(n+1)-1 \right \rceil t+\epsilon$ pomnożonej razy dwa,
+z formuły z treści $\lceil w / 256 \rceil(3\left \lceil\log_2(n+1)-1 \right \rceil t+\epsilon)$ pomnożonej razy dwa,
 w której:
 
 - liczba procesów $n$ to `3,15` albo `16` w zależności od testu
@@ -15,6 +15,7 @@ w której:
 - opóźnione są jednie odczyty (wywołania funkcji `chsend`) o `100ms` albo `50ms`.
   Zatem $t$ najdłuższy czas przesłania pojedynczej wiadomości (wysłanie + odczyt)
   to każdorazowo czas wysłania.
+- $w$ - wielkość wiadomości to $1$
 
 Warto zwrócić uwagę, że treść zadania `assignment.md` specyfikuje, że
 wiadomości przesyłane z użyciem `chsend` przy wymienianiu małych danych powinny być odpowiednio małe.
