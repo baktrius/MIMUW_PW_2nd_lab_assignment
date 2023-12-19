@@ -67,7 +67,7 @@ static void delay(const char *delay_var, const size_t size)
         int delay_ms = atoi(delay_str);
         if (delay_ms > 0)
         {
-            msleep(delay_ms * (size + ATOMIC_BLOCK_SIZE - 1) / ATOMIC_BLOCK_SIZE);
+            msleep((size + ATOMIC_BLOCK_SIZE - 1) / ATOMIC_BLOCK_SIZE * delay_ms);
         }
     }
     // Defaults to not wait
