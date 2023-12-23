@@ -11,7 +11,9 @@ int main(int argc, char **argv)
     MIMPI_Init(false);
     printf("before\n");
     fflush(stdout);
-    setenv(WRITE_VAR, getenv("DELAY"), true);
+    const char *delay = getenv("DELAY");
+    if (delay)
+        setenv(WRITE_VAR, delay, true);
     ASSERT_MIMPI_OK(MIMPI_Barrier());
     unsetenv(WRITE_VAR);
     printf("after\n");

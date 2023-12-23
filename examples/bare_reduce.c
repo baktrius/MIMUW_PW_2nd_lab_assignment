@@ -6,6 +6,8 @@
 #include "../mimpi.h"
 #include "mimpi_err.h"
 
+#define WRITE_VAR "CHANNELS_WRITE_DELAY"
+
 int main(int argc, char **argv)
 {
     size_t data_size = 1;
@@ -17,9 +19,14 @@ int main(int argc, char **argv)
     MIMPI_Init(false);
     int const world_rank = MIMPI_World_rank();
 
+    const char *delay = getenv("DELAY");
+    if (delay)
+        setenv(WRITE_VAR, delay, true);
+
     uint8_t *data = malloc(data_size);
     assert(data);
     memset(data, 1, data_size);
+
     if (world_rank == 0)
     {
         uint8_t *recv_data = malloc(data_size);
@@ -37,6 +44,8 @@ int main(int argc, char **argv)
     for (int i = 1; i < data_size; ++i)
         assert(data[i] == data[0]);
     free(data);
+
+    unsetenv(WRITE_VAR);
 
     MIMPI_Finalize();
     return 0;

@@ -1,4 +1,4 @@
-MIMPI_WRITE_DELAY=100 timeout 1s ./mimpirun 15 examples_build/bare_barrier
+DELAY=100 timeout 1s ./mimpirun 15 examples_build/bare_barrier
 =====================================================================
 before
 before
