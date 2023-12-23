@@ -51,8 +51,8 @@ static int msleep(long msec)
     return res;
 }
 
-#define WRITE_VAR "MIMPI_WRITE_DELAY"
-#define READ_VAR "MIMPI_READ_DELAY"
+#define WRITE_VAR "CHANNELS_WRITE_DELAY"
+#define READ_VAR "CHANNELS_READ_DELAY"
 #define ATOMIC_BLOCK_SIZE 512
 
 pthread_mutex_t mutex;
