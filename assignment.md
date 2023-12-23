@@ -163,7 +163,7 @@ Dokładniej, przy założeniu, że detekcja zakleszczeń jest nieaktywna, wymaga
 do czasu zakończenia $p$ w ostatnim procesie minęło co najwyżej $\lceil w / 256 \rceil(3\left \lceil\log_2(n+1)-1 \right \rceil t+\epsilon)$ czasu gdzie:
 
 - $n$ to liczba procesów
-- $t$ to suma najdłuższych czasów wykonania `chsend`, `chrecv` związanych z przesyłem komunikatów w ramach danego wywołania funkcji do komunikacji grupowej. Dodatkowe informacje można wyczytać z przykładowej implementacji `channel.c` i z zapewnionych testów z katalogu `tests/effectiveness`
+- $t$ to najdłuższy czas wykonania `chsend` związany z przesyłem jednego komunikatu w ramach danego wywołania funkcji do komunikacji grupowej. Dodatkowe informacje można wyczytać z przykładowej implementacji `channel.c` i z zapewnionych testów z katalogu `tests/effectiveness`
 - $\epsilon$ to nieduża stała (rzędu co najwyżej milisekund), która nie zależy od $t$
 - $w$ to wielkość w bajtach wiadomości przetwarzanej w danym wywołaniu funkcji komunikacji grupowej (w przypadku wywołania `MIMPI_Barrier` należy założyć $w=1$)
 
