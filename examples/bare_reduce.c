@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 
     const char *delay = getenv("DELAY");
     if (delay)
-        setenv(WRITE_VAR, delay, true);
+        assert(setenv(WRITE_VAR, delay, true) == 0);
 
     uint8_t *data = malloc(data_size);
     assert(data);
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
         assert(data[i] == data[0]);
     free(data);
 
-    unsetenv(WRITE_VAR);
+    assert(unsetenv(WRITE_VAR) == 0);
 
     MIMPI_Finalize();
     return 0;

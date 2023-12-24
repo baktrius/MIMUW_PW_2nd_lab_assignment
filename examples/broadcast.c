@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
+#include <assert.h>
 #include "../mimpi.h"
 #include "mimpi_err.h"
 
@@ -12,7 +13,7 @@ int main(int argc, char **argv)
 
     const char *delay = getenv("DELAY");
     if (delay)
-        setenv(WRITE_VAR, delay, true);
+        assert(setenv(WRITE_VAR, delay, true) == 0);
 
     char number = 0;
     if (world_rank == 0)
@@ -21,7 +22,7 @@ int main(int argc, char **argv)
     printf("Number: %d\n", number);
     fflush(stdout);
 
-    unsetenv(WRITE_VAR);
+    assert(unsetenv(WRITE_VAR) == 0);
 
     MIMPI_Finalize();
     return 0;
