@@ -4,7 +4,7 @@ EXAMPLES := $(addprefix examples_build/,$(notdir $(basename $(wildcard examples/
 FILES_ALLOWED_FOR_CHANGE := $(shell cat files_allowed_for_change)
 CHANGED_FILES := $(wildcard $(FILES_ALLOWED_FOR_CHANGE))
 TEMPLATE_HASH := $(shell cat template_hash)
-CFLAGS := --std=gnu11 -Wall -DDEBUG -lpthread
+CFLAGS := --std=gnu11 -Wall -DDEBUG -pthread
 TESTS := $(wildcard tests/*.self)
 
 CHANNEL_SRC := channel.c channel.h
