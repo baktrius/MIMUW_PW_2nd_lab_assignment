@@ -22,7 +22,7 @@ examples_build/%: examples/%.c $(MIMPI_SRC)
 	gcc $(CFLAGS) -o $@ $(filter %.c,$^)
 
 assignment.zip: $(CHANGED_FILES)
-	zip assignment.zip $(CHANGED_FILES)
+	zip assignment.zip $(CHANGED_FILES) template_hash
 
 clean:
 	rm -rf mimpirun assignment.zip examples_build
