@@ -6,7 +6,7 @@ make assignment.zip
 
 # check if public repo is available
 if cd public_repo ; then
-    git restore --source=461572ff69adfa2ff80209e007a2f49288bad0a3 test_assignment
+    git restore --source=4fdde04756348850bae8f38647dd81a1eba792bf test_assignment
     ./test_assignment ../assignment.zip --force
     cd ..
 else
