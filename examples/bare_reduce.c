@@ -21,7 +21,10 @@ int main(int argc, char **argv)
 
     const char *delay = getenv("DELAY");
     if (delay)
-        assert(setenv(WRITE_VAR, delay, true) == 0);
+    {
+        int res = setenv(WRITE_VAR, delay, true);
+        assert(res == 0);
+    }
 
     uint8_t *data = malloc(data_size);
     assert(data);
@@ -39,13 +42,16 @@ int main(int argc, char **argv)
         free(recv_data);
     }
     else
+    {
         ASSERT_MIMPI_OK(MIMPI_Reduce(data, NULL, data_size, MIMPI_SUM, 0));
+    }
     assert(data[0] == 1);
     for (int i = 1; i < data_size; ++i)
         assert(data[i] == data[0]);
     free(data);
 
-    assert(unsetenv(WRITE_VAR) == 0);
+    int res = unsetenv(WRITE_VAR);
+    assert(res == 0);
 
     MIMPI_Finalize();
     return 0;

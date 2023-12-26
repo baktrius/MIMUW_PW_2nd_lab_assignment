@@ -14,9 +14,13 @@ int main(int argc, char **argv)
     fflush(stdout);
     const char *delay = getenv("DELAY");
     if (delay)
-        assert(setenv(WRITE_VAR, delay, true) == 0);
+    {
+        int res = setenv(WRITE_VAR, delay, true);
+        assert(res == 0);
+    }
     ASSERT_MIMPI_OK(MIMPI_Barrier());
-    assert(unsetenv(WRITE_VAR) == 0);
+    int res = unsetenv(WRITE_VAR);
+    assert(res == 0);
     printf("after\n");
     MIMPI_Finalize();
     return 0;
