@@ -1,22 +1,15 @@
 #!/bin/bash
 
+set -e
+
 # remove untracked files from public_repo folder
 git clean -fd
 
-# extract solution
-unzip "$1" -d assignment
-
-# reset public_repo folder to known state part 2 (specified by template hash)
+# reset public_repo folder to known state (specified by template hash)
 git reset --hard HEAD
-git switch --detach `cat assignment/template_hash`
+git switch --detach `unzip -p "$1" template_hash`
 
-# populate public_repo with files from assignment.zip which are allowd for change
-cd assignment
-for file in `cat ../files_allowed_for_change`
-do
-    cp "$file" "../$file"
-done
-cd ..
+./import_assignment "$1"
 
 # build solution and run tests
 ./test
