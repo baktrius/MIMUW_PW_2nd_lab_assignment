@@ -160,11 +160,12 @@ opuścił barierę z błędem.
 
 Każda procedura $p$ do komunikacji grupowej powinna być zrealizowana efektywnie.
 Dokładniej, przy założeniu, że detekcja zakleszczeń jest nieaktywna, wymagamy aby od czasu wywołania $p$ przez ostatni proces
-do czasu zakończenia $p$ w ostatnim procesie minęło co najwyżej $3\left \lceil\log_2(n+1)-1 \right \rceil t+\epsilon$ czasu gdzie:
+do czasu zakończenia $p$ w ostatnim procesie minęło co najwyżej $\lceil w / 256 \rceil(3\left \lceil\log_2(n+1)-1 \right \rceil t+\epsilon)$ czasu gdzie:
 
 - $n$ to liczba procesów
-- $t$ to najdłuższy czas przesłania pojedynczej wiadomości - suma czasów wykonania pary odpowiadających sobie wywołań `chsend` i `chrecv`. Dodatkowe informacje można wyczytać z przykładowej implementacji `channel.c` i z zapewnionych testów z katalogu `tests/effectiveness`
-- $\epsilon$ to nieduża stała (rzędu co najwyżej milisekund), która nie zależy od $t$.
+- $t$ to najdłuższy czas wykonania `chsend` związany z przesyłem jednego komunikatu w ramach danego wywołania funkcji do komunikacji grupowej. Dodatkowe informacje można wyczytać z przykładowej implementacji `channel.c` i z zapewnionych testów z katalogu `tests/effectiveness`
+- $\epsilon$ to nieduża stała (rzędu co najwyżej milisekund), która nie zależy od $t$
+- $w$ to wielkość w bajtach wiadomości przetwarzanej w danym wywołaniu funkcji komunikacji grupowej (w przypadku wywołania `MIMPI_Barrier` należy założyć $w=1$)
 
 Dodatkowo aby implementacja została uznana za efektywną przesyłane dane nie powinny być
 opatrzone za dużą liczbą metadanych.
