@@ -19,7 +19,7 @@ git clean -fd
 
 # reset repository to known state (specified by template hash)
 git reset --hard HEAD
-git switch --detach `unzip -p "$1" template_hash`
+git switch --detach `unzip -p "$1" template_hash || echo "origin/main"` || git switch --detach origin/main
 
 ./import_assignment "$1"
 
