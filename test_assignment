@@ -2,6 +2,18 @@
 
 set -e
 
+if [ $# -ne 2 -o "$2" != "--force" ]
+  then
+    echo "Usage: ./test_assignment PATH_TO_EXPORTED_SOLUTION --force"
+    echo
+    echo "THIS SCRIPT WILL REMOVE ALL DATA FROM REPOSITORY - use with care!"
+    echo
+    echo "Zip file with solution has to be located outside of repository folder."
+    echo "This script assumes it is invoked from folder containing repository."
+    exit 1
+fi
+
+
 # remove untracked files from repository
 git clean -fd
 
