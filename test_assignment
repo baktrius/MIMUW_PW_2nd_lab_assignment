@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e
+
+if [ $# -ne 2 -o "$2" != "--force" ]
+  then
+    echo "Usage: ./test_assignment PATH_TO_EXPORTED_SOLUTION --force"
+    echo
+    echo "THIS SCRIPT WILL REMOVE ALL DATA FROM REPOSITORY - use with care!"
+    echo
+    echo "Zip file with solution has to be located outside of repository folder."
+    echo "This script assumes it is invoked from folder containing repository."
+    exit 1
+fi
+
+
+# remove untracked files from repository
+git clean -fd
+
+# reset repository to known state (specified by template hash)
+git reset --hard HEAD
+git switch --detach `unzip -p "$1" template_hash || echo "origin/main"` || git switch --detach origin/main
+
+./import_assignment "$1"
+
+# build solution and run tests
+./test
