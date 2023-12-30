@@ -44,19 +44,25 @@ do
     eval "exec $i<&-"
 done
 
-# invoke all self tests
-for file in tests/*.self  tests/*/*.self
-do
-    if [ -e "$file" ] ; then 
-        run_test self_test $file
-    fi
-done
+tests="$*"
 
-# invoke all shell tests
-for file in tests/*.sh tests/*/*.sh
+# select some tests if none are specified
+test "$tests" = "" && tests=$(echo tests/*.sh tests/*/*.sh tests/*.self tests/*/*.self)
+
+# invoke all tests
+for file in $tests
 do
-    if [ -e "$file" ] ; then 
-        run_test $file
+    if [ -e "$file" ] ; then
+        filename=$(basename -- "$file")
+        extension="${filename##*.}"
+        if [ "$extension" = "self" ] ; then
+            run_test self_test $file
+        elif [ "$extension" = "sh" ] ; then
+            run_test "$file"
+        else
+            echo "Ignore '$file' because of not matching extension"
+            echo
+        fi
     fi
 done
 
