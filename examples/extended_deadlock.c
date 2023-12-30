@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "../mimpi.h"
 #define WRITE_VAR "CHANNELS_WRITE_DELAY"
+#define READ_VAR "CHANNELS_READ_DELAY"
 
 int main(int argc, char **argv)
 {
@@ -14,20 +15,26 @@ int main(int argc, char **argv)
     char c = '6';
     if (world_rank == 0)
     {
-        int res = setenv(WRITE_VAR, "500", true);
+        int res = setenv(WRITE_VAR, "100", true);
+        int res2 = setenv(READ_VAR, "100", true);
+        assert(res2 == 0);
         assert(res == 0);
 
-        assert(MIMPI_Send(&c, 1, 1, 1234) == MIMPI_SUCCESS);
+        assert(MIMPI_Send(&c, 1, 1, 1) == MIMPI_SUCCESS);
+        assert(MIMPI_Recv(&c, 1, 1, 1) == MIMPI_SUCCESS);
         assert(MIMPI_Recv(&c, 1, 1, 1) == MIMPI_ERROR_DEADLOCK_DETECTED);
         assert(MIMPI_Recv(&c, 1, 1, 1) == MIMPI_ERROR_DEADLOCK_DETECTED);
     }
     else if (world_rank == 1)
     {
         int res = setenv(WRITE_VAR, "100", true);
+        int res2 = setenv(READ_VAR, "100", true);
+        assert(res2 == 0);
         assert(res == 0);
-        assert(MIMPI_Recv(&c, 1, 0, 1234) == MIMPI_SUCCESS);
+
+        assert(MIMPI_Recv(&c, 1, 0, 1) == MIMPI_SUCCESS);
+        assert(MIMPI_Send(&c, 1, 0, 1) == MIMPI_SUCCESS);
         assert(MIMPI_Recv(&c, 1, 0, 1) == MIMPI_ERROR_DEADLOCK_DETECTED);
-        assert(MIMPI_Recv(&c, 1, 0, 1234) == MIMPI_ERROR_DEADLOCK_DETECTED);
         assert(MIMPI_Recv(&c, 1, 0, 1) == MIMPI_ERROR_DEADLOCK_DETECTED);
     }
     else
