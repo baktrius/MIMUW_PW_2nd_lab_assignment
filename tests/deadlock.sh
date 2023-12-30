@@ -1,2 +1,2 @@
 set -ex
-timeout 1s ./mimpirun 4 examples_build/deadlock
+./run_test 1s 4 examples_build/deadlock

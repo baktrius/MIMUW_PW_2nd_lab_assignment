@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "../mimpi.h"
 #include "mimpi_err.h"
+#include "test.h"
 
 #define WRITE_VAR "CHANNELS_WRITE_DELAY"
 
@@ -29,5 +30,5 @@ int main(int argc, char **argv)
     assert(res == 0);
 
     MIMPI_Finalize();
-    return 0;
+    return test_success();
 }
