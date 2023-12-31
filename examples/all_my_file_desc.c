@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/resource.h>
 #include "../mimpi.h"
+#include "test.h"
 #include "mimpi_err.h"
 
 #define max_fd 1024
@@ -51,5 +52,5 @@ int main(int argc, char **argv)
     }
 
     MIMPI_Finalize();
-    return 0;
+    return test_success();
 }

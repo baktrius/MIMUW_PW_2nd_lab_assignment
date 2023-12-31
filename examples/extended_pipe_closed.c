@@ -6,6 +6,7 @@
 #include <time.h>
 #include <unistd.h>
 #include "../mimpi.h"
+#include "test.h"
 
 #define NS_PER_1_MS 1 ## 000 ## 000
 
@@ -70,5 +71,5 @@ int main(int argc, char **argv)
 
     MIMPI_Finalize();
     printf("Done\n");
-    return 0;
+    return test_success();
 }

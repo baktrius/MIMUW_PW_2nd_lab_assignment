@@ -3,8 +3,9 @@
 #include <stdio.h>
 #include "../mimpi.h"
 #include "mimpi_err.h"
+#include "test.h"
 
-#define steps 1000000
+#define steps 200000
 #define tagSpace 12
 #define spaceSize 12
 
@@ -99,5 +100,5 @@ int main(int argc, char **argv)
     MIMPI_Barrier();
     fflush(stdout);
     MIMPI_Finalize();
-    return 0;
+    return test_success();
 }

@@ -1,4 +1,4 @@
-timeout 10s ./mimpirun 10 examples_build/extended_hello 1 2 3 "XD DX"
+./run_test 10s 10 examples_build/extended_hello 1 2 3 "XD DX"
 =====================================================================
 Hello World from process 0 of 10.
 My argc 5.

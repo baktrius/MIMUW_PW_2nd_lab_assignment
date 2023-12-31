@@ -6,6 +6,7 @@
 #include <time.h>
 #include <unistd.h>
 #include "../mimpi.h"
+#include "test.h"
 
 // based on: https://stackoverflow.com/questions/1157209/is-there-an-alternative-sleep-function-in-c-to-milliseconds
 /* msleep(): Sleep for the requested number of milliseconds. */
@@ -49,5 +50,5 @@ int main(int argc, char **argv)
     }
 
     MIMPI_Finalize();
-    return 0;
+    return test_success();
 }

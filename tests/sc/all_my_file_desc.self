@@ -1,3 +1,3 @@
-timeout 10s ./mimpirun 2 examples_build/just_the_correct_msg
+./run_test 0.4s 16 ./examples_build/all_my_file_desc
 =====================================================================
 Process 1 received number 42 from process 0

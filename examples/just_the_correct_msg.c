@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include "../mimpi.h"
 #include "mimpi_err.h"
+#include "test.h"
 
 #define NS_PER_1_MS 1 ## 000 ## 000
 
@@ -65,5 +66,5 @@ int main(int argc, char **argv)
     }
 
     MIMPI_Finalize();
-    return 0;
+    return test_success();
 }

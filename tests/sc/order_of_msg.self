@@ -1,4 +1,4 @@
-timeout 10s ./mimpirun 2 examples_build/order_of_msg
+./run_test 10s 2 examples_build/order_of_msg
 =====================================================================
 Process 1 received number 0 from process 0
 Process 1 received number 1 from process 0
