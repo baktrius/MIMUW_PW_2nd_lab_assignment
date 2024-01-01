@@ -30,6 +30,28 @@ run_test () {
     fi
 }
 
+run_tests() {
+    for file in "$@"
+    do
+        if [ -f "$file" ] ; then
+            filename=$(basename -- "$file")
+            extension="${filename##*.}"
+            if [ "$extension" = "self" ] ; then
+                run_test self_test "$file"
+            elif [ "$extension" = "sh" ] ; then
+                run_test "$file"
+            else
+                echo "Ignore '$file' because of not matching extension"
+                echo
+            fi
+        elif [ -d "$file" ] ; then
+            run_tests "$file"/*
+        else
+            echo "file: $file seems to not be file or directory"
+        fi
+    done
+}
+
 # exit on ctrl+c
 trap "exit 4" INT
 
@@ -44,21 +66,12 @@ do
     eval "exec $i<&-"
 done
 
-# invoke all self tests
-for file in tests/*.self  tests/*/*.self
-do
-    if [ -e "$file" ] ; then 
-        run_test self_test $file
-    fi
-done
-
-# invoke all shell tests
-for file in tests/*.sh tests/*/*.sh
-do
-    if [ -e "$file" ] ; then 
-        run_test $file
-    fi
-done
+if [ "$#" = 0 ] ; then
+    # run all tests if none are specified
+    run_tests "tests"
+else
+    run_tests "$@"
+fi
 
 TOTAL_NUM=$(($FAILURES_NUM+$SUCCESSES_NUM))
 echo -e "\n$TOTAL_NUM tests in total, from which"

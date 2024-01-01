@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -e
+
+# Print help usage if there are fewer then 3 positional arguments
+if [ $# -lt 3 ] ; then
+    echo "Usage: $0 TIMEOUT NUM_OF_WORKERS PATH_TO_PROG [ADDITIONAL_ARGS]"
+    exit 1
+fi
+
+# Read important values from positional args into named vars
+TIMEOUT=$1
+NUM_OF_WORKERS=$2
+shift 2
+
+# Create temporary file
+tmp_file=$(mktemp)
+
+# Invoke mimpirun with appropriate timeout and arguments
+# "|| true" used to ignore ./mimpirun return code
+timeout "$TIMEOUT" ./mimpirun "$NUM_OF_WORKERS" "$@" 2> "$tmp_file" || true
+
+result=0
+
+# Check if all workers finished successfully
+# - num of <<success>> is equal to number of created workers
+test "$(grep -c '<<success>>' "$tmp_file")" -ne "$NUM_OF_WORKERS" && result=3
+
+# Check if error has been detected - <<error>> was found in stderr
+grep "<<error>>" "$tmp_file" > /dev/null && result=2
+
+# Print stderr in case of error
+test "$result" -ne 0 && cat "$tmp_file" >&2
+
+# Remove temporary file
+rm "$tmp_file"
+
+# Exit with appropriate return code
+exit "$result"
