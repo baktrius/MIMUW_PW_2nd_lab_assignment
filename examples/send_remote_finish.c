@@ -3,7 +3,7 @@
 #include "../mimpi.h"
 #include "test.h"
 
-#define MESSAGE "Litwo ojczyzno moja Ty jestes jak zdrowie ile Cie trzeba cenic ten tylko sie dowie, kto Cię stracil..."
+#define MESSAGE "Litwo! Ojczyzno moja! ty jestes jak zdrowie.\nIle cie trzeba cenic, ten tylko sie dowie,\nKto cie stracil..."
 
 int main(int argc, char **argv)
 {
