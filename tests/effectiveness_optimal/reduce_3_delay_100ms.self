@@ -1,3 +1,3 @@
-DELAY=100 timeout 0.4s ./mimpirun 3 examples_build/bare_reduce
+DELAY=100 ./run_test 0.4s 3 examples_build/bare_reduce
 =====================================================================
 Number: 3

@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "../mimpi.h"
+#include "test.h"
 
 int main(int argc, char **argv)
 {
@@ -12,5 +13,5 @@ int main(int argc, char **argv)
     printf("Hello World from process %d of %d\n", process_rank, size_of_cluster);
 
     MIMPI_Finalize();
-    return 0;
+    return test_success();
 }
