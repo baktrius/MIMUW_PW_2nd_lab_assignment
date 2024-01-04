@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "test.h"
 #include "../mimpi.h"
 #include "mimpi_err.h"
 
@@ -17,4 +18,5 @@ int main(int argc, char **argv) {
     ASSERT_MIMPI_OK(MIMPI_Bcast(&number, sizeof(int), root));
     assert(number == 42);
     MIMPI_Finalize();
+    return test_success();
 }

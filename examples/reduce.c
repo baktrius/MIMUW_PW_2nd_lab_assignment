@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#include "test.h"
 #include "../mimpi.h"
 #include "mimpi_err.h"
 
@@ -48,9 +49,10 @@ int main(int argc, char **argv) {
         } else {
             assert(recv_data[0] == (uint8_t)(((world_size + 1) * (world_size)) / 2));
             assert(recv_data[1] == world_size);
-            assert(recv_data[2] == (uint8_t)((1 << world_size) * (((world_size + 1) * (world_size)) / 2) - world_size));
+            assert(recv_data[2] == (uint8_t)((world_size - 1) * (world_size)));
             assert(recv_data[3] == 0);
         }
     }
     MIMPI_Finalize();
+    return test_success();
 }

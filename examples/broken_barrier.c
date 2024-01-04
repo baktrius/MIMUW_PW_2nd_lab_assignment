@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #include "../mimpi.h"
+#include "test.h"
 
 int main(int argc, char **argv) {
     int to_break = atoi(argv[1]);
@@ -15,4 +16,5 @@ int main(int argc, char **argv) {
         sleep(1);
     }
     MIMPI_Finalize();
+    return test_success();
 }

@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdbool.h>
 
+#include "test.h"
 #include "../mimpi.h"
 
 int main(int argc, char **argv)
@@ -17,5 +18,5 @@ int main(int argc, char **argv)
         assert(MIMPI_Recv(&number, 1, 0, 1) == MIMPI_ERROR_DEADLOCK_DETECTED);
     }
     MIMPI_Finalize();
-    return 0;
+    return test_success();
 }
