@@ -15,8 +15,8 @@ int main(int argc, char **argv)
     char number = 42;
     ASSERT_MIMPI_OK(MIMPI_Send(&number, 1, partner_rank, 2));
     ASSERT_MIMPI_OK(MIMPI_Send(&number, 1, partner_rank, 1));
-    assert(MIMPI_Recv(&number, 1, partner_rank, 1) == MIMPI_SUCCESS);
-    assert(MIMPI_Recv(&number, 1, partner_rank, 1) == MIMPI_ERROR_DEADLOCK_DETECTED);
+    ASSERT_MIMPI_OK(MIMPI_Recv(&number, 1, partner_rank, 1));
+    ASSERT_MIMPI_RETCODE(MIMPI_Recv(&number, 1, partner_rank, 1), MIMPI_ERROR_DEADLOCK_DETECTED); 
     MIMPI_Finalize();
     return test_success();
 }
