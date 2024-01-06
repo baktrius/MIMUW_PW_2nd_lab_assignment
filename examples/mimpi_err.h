@@ -15,16 +15,18 @@ static char const *const print_mimpi_error(MIMPI_Retcode const ret) {
     }
 }
 
-#define ASSERT_MIMPI_OK(expr)                                                                      \
+#define ASSERT_MIMPI_OK(expr) ASSERT_MIMPI_RETCODE(expr, MIMPI_SUCCESS)
+
+#define ASSERT_MIMPI_RETCODE(expr, expected)                                                       \
     do {                                                                                           \
-        MIMPI_Retcode ret = expr;                                                                  \
-        if (ret != MIMPI_SUCCESS) {                                                                \
+        MIMPI_Retcode _ret = expr;                                                                 \
+        if (_ret != expected) {                                                                    \
             fprintf(                                                                               \
                 stderr,                                                                            \
                 "MIMPI command failed: %s\n\tIn function %s() in %s line %d.\n\t Code: %i - %s\n", \
-                #expr, __func__, __FILE__, __LINE__, ret, print_mimpi_error(ret)                   \
+                #expr, __func__, __FILE__, __LINE__, _ret, print_mimpi_error(_ret)                 \
             );                                                                                     \
-            exit(ret);                                                                             \
+            exit(_ret);                                                                            \
         }                                                                                          \
     } while(0)
 
