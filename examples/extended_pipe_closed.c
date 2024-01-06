@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include "../mimpi.h"
 #include "test.h"
+#include "mimpi_err.h"
 
 #define NS_PER_1_MS 1 ## 000 ## 000
 
@@ -48,24 +49,24 @@ int main(int argc, char **argv)
     if (world_rank == 0) {
         msleep(500);
     } else if (world_rank == 1) {
-        assert(MIMPI_Recv(&number, 1, 0, tag) == MIMPI_ERROR_REMOTE_FINISHED);
-        assert(MIMPI_Send(&number, 1, 0, tag) == MIMPI_ERROR_REMOTE_FINISHED);
-        assert(MIMPI_Recv(&number, 1, 0, tag) == MIMPI_ERROR_REMOTE_FINISHED);
+        ASSERT_MIMPI_RETCODE(MIMPI_Recv(&number, 1, 0, tag),MIMPI_ERROR_REMOTE_FINISHED);
+        ASSERT_MIMPI_RETCODE(MIMPI_Send(&number, 1, 0, tag), MIMPI_ERROR_REMOTE_FINISHED);
+        ASSERT_MIMPI_RETCODE(MIMPI_Recv(&number, 1, 0, tag), MIMPI_ERROR_REMOTE_FINISHED);
         assert(number == 42);
     }else if(world_rank == 2){
         msleep(1000);
-        assert(MIMPI_Recv(&number, 1, 0, tag) == MIMPI_ERROR_REMOTE_FINISHED);
+        ASSERT_MIMPI_RETCODE(MIMPI_Recv(&number, 1, 0, tag), MIMPI_ERROR_REMOTE_FINISHED);
         assert(number == 42);
-        assert(MIMPI_Recv(&number, 1, 0, tag) == MIMPI_ERROR_REMOTE_FINISHED);
+        ASSERT_MIMPI_RETCODE(MIMPI_Recv(&number, 1, 0, tag), MIMPI_ERROR_REMOTE_FINISHED);
         assert(number == 42);
     }else if(world_rank == 3){
         // heurystyczne założenie że wszytko zdąży się wykonać w odpowiednim czasie żeby ten proces już wiedział że odbiorca jest zamknięty
         msleep(1000);
-        assert(MIMPI_Send(&number, 1, 0, tag) == MIMPI_ERROR_REMOTE_FINISHED);
+        ASSERT_MIMPI_RETCODE(MIMPI_Send(&number, 1, 0, tag), MIMPI_ERROR_REMOTE_FINISHED);
     }else if(world_rank == 4){
         // heurystyczne założenie że chwrite zakończy się z błędem "Zamknięty odpbiorca".
         setenv("CHANNELS_WRITE_DELAY", "1000", true);
-        assert(MIMPI_Send(&number, 1, 0, tag) == MIMPI_ERROR_REMOTE_FINISHED);
+        ASSERT_MIMPI_RETCODE(MIMPI_Send(&number, 1, 0, tag), MIMPI_ERROR_REMOTE_FINISHED);
         setenv("CHANNELS_WRITE_DELAY", "1", true);
     }
 

@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include "../mimpi.h"
 #include "test.h"
+#include "mimpi_err.h"
 
 // based on: https://stackoverflow.com/questions/1157209/is-there-an-alternative-sleep-function-in-c-to-milliseconds
 /* msleep(): Sleep for the requested number of milliseconds. */
@@ -49,10 +50,10 @@ int main(int argc, char **argv)
         assert(res2 == 0);
         assert(res == 0);
 
-        assert(MIMPI_Send(&c, 1, 1, 1) == MIMPI_SUCCESS);
-        assert(MIMPI_Recv(&c, 1, 1, 1) == MIMPI_SUCCESS);
-        assert(MIMPI_Recv(&c, 1, 1, 1) == MIMPI_ERROR_DEADLOCK_DETECTED);
-        assert(MIMPI_Recv(&c, 1, 1, 1) == MIMPI_ERROR_DEADLOCK_DETECTED);
+        ASSERT_MIMPI_RETCODE(MIMPI_Send(&c, 1, 1, 1), MIMPI_SUCCESS);
+        ASSERT_MIMPI_RETCODE(MIMPI_Recv(&c, 1, 1, 1), MIMPI_SUCCESS);
+        ASSERT_MIMPI_RETCODE(MIMPI_Recv(&c, 1, 1, 1), MIMPI_ERROR_DEADLOCK_DETECTED);
+        ASSERT_MIMPI_RETCODE(MIMPI_Recv(&c, 1, 1, 1), MIMPI_ERROR_DEADLOCK_DETECTED);
     }
     else if (world_rank == 1)
     {
@@ -61,10 +62,10 @@ int main(int argc, char **argv)
         assert(res2 == 0);
         assert(res == 0);
 
-        assert(MIMPI_Recv(&c, 1, 0, 1) == MIMPI_SUCCESS);
-        assert(MIMPI_Send(&c, 1, 0, 1) == MIMPI_SUCCESS);
-        assert(MIMPI_Recv(&c, 1, 0, 1) == MIMPI_ERROR_DEADLOCK_DETECTED);
-        assert(MIMPI_Recv(&c, 1, 0, 1) == MIMPI_ERROR_DEADLOCK_DETECTED);
+        ASSERT_MIMPI_RETCODE(MIMPI_Recv(&c, 1, 0, 1), MIMPI_SUCCESS);
+        ASSERT_MIMPI_RETCODE(MIMPI_Send(&c, 1, 0, 1), MIMPI_SUCCESS);
+        ASSERT_MIMPI_RETCODE(MIMPI_Recv(&c, 1, 0, 1), MIMPI_ERROR_DEADLOCK_DETECTED);
+        ASSERT_MIMPI_RETCODE(MIMPI_Recv(&c, 1, 0, 1), MIMPI_ERROR_DEADLOCK_DETECTED);
     }
     else
     {
@@ -72,11 +73,11 @@ int main(int argc, char **argv)
         {
             if (i % 2)
                 msleep(20);
-            assert(MIMPI_Send(&c, 1, world_rank % 2, 1234) == MIMPI_SUCCESS);
+            ASSERT_MIMPI_RETCODE(MIMPI_Send(&c, 1, world_rank % 2, 1234), MIMPI_SUCCESS);
         }
     }
 
-    assert(MIMPI_Barrier() == MIMPI_SUCCESS);
+    ASSERT_MIMPI_RETCODE(MIMPI_Barrier(), MIMPI_SUCCESS);
     MIMPI_Finalize();
     printf("Done\n");
     return test_success();
