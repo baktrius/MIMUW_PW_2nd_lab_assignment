@@ -9,7 +9,7 @@ int main(int argc, char **argv)
     MIMPI_Init(true);
 
     int const world_rank = MIMPI_World_rank();
-    char number;
+    char number = 42;
 
     if (world_rank == 0) {
         assert(MIMPI_Recv(&number, 1, 1, 1) == MIMPI_ERROR_DEADLOCK_DETECTED);
