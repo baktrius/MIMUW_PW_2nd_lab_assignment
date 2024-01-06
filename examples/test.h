@@ -5,7 +5,7 @@
 
 #define SUCCESS_MARKER "<<success>>\n"
 
-int test_success()
+static inline int test_success()
 {
     // below unchecked syscall return code
     write(STDERR_FILENO, SUCCESS_MARKER, sizeof(SUCCESS_MARKER));
