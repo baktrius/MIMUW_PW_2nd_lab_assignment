@@ -9,19 +9,19 @@
 #define tagSpace 12
 #define spaceSize 12
 
-unsigned char myRand1(long long state)
+unsigned char myRand1(unsigned long long state)
 {
     state = state * 1664525 + 1013904223;
     return state >> 20;
 }
 
-unsigned char myRand2(long long state)
+unsigned char myRand2(unsigned long long state)
 {
     state = state * 25214903917 + 11;
     return state >> 20;
 }
 
-unsigned char myRand3(long long state)
+unsigned char myRand3(unsigned long long state)
 {
     state = state * 16843009 + 826366247;
     return state >> 20;
@@ -48,7 +48,7 @@ void validateData(int tag, int size, char *data)
     }
 }
 
-long long st = 2137;
+static unsigned long long st = 2137;
 unsigned char myRand4()
 {
     st = st * 214013 + 2531011;

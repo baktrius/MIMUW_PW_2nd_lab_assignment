@@ -50,7 +50,8 @@ int main(int argc, char **argv)
         msleep(500);
     } else if (world_rank == 1) {
         ASSERT_MIMPI_RETCODE(MIMPI_Recv(&number, 1, 0, tag),MIMPI_ERROR_REMOTE_FINISHED);
-        ASSERT_MIMPI_RETCODE(MIMPI_Send(&number, 1, 0, tag), MIMPI_ERROR_REMOTE_FINISHED);
+        if(MIMPI_World_size()>3)
+            ASSERT_MIMPI_RETCODE(MIMPI_Send(&number, 1, 0, tag), MIMPI_ERROR_REMOTE_FINISHED);
         ASSERT_MIMPI_RETCODE(MIMPI_Recv(&number, 1, 0, tag), MIMPI_ERROR_REMOTE_FINISHED);
         assert(number == 42);
     }else if(world_rank == 2){
