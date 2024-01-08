@@ -348,6 +348,7 @@ Szablony do uzupełnienia:
 
 - zbudowanie `mimpirun` i wszystkich przykładów z katalogu `examples/`: `make`
 - uruchomienie lokalnych testów: `./test`
+- uruchomienie lokalnych testów z valgrindem : `VALGRIND=1 ./test`
 - uruchomienie testów według oficjalnego schematu: `./test_on_public_repo`
   
   Powyższa komenda pozwala upewnić się, że rozwiązanie spełnia wymogi techniczne wyszczególnione w [schemacie oceniania](#schemat-oceniania).
