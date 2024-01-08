@@ -10,11 +10,15 @@ TESTS := $(wildcard tests/*.self)
 CHANNEL_SRC := channel.c channel.h
 MIMPI_COMMON_SRC := $(CHANNEL_SRC) mimpi_common.c mimpi_common.h
 MIMPIRUN_SRC := $(MIMPI_COMMON_SRC) mimpirun.c
+MIMPIRUN_SRC_2 := channelv2.c channel.h mimpi_common.c mimpi_common.h mimpirun.c
 MIMPI_SRC := $(MIMPI_COMMON_SRC) mimpi.c mimpi.h
 
-all: mimpirun $(EXAMPLES) $(TESTS)
+all: mimpirun mimpirun2 $(EXAMPLES) $(TESTS)
 
 mimpirun: $(MIMPIRUN_SRC)
+	gcc $(CFLAGS) -o $@ $(filter %.c,$^)
+
+mimpirun2: $(MIMPIRUN_SRC_2)
 	gcc $(CFLAGS) -o $@ $(filter %.c,$^)
 
 examples_build/%: examples/%.c $(MIMPI_SRC)
