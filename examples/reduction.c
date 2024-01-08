@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "../mimpi.h"
 #include "mimpi_err.h"
+#include "test.h"
 
 static unsigned factorial(unsigned n) {
     if (n == 0 || n == 1) {
@@ -44,11 +45,11 @@ int main(int argc, char **argv)
                 // if (recv_data[k] != result) {
                 //     fprintf(stderr, "MISMATCH: op_idx %i, root %i, k=%i: expected %i, got %i.\n", i, root, k, result, recv_data[k]);
                 // }
-                assert(recv_data[k] == result);
+                test_assert(recv_data[k] == result);
             }
         }
     }
 
     MIMPI_Finalize();
-    return 0;
+    return test_success();
 }

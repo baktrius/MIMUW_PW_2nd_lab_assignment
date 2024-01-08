@@ -5,30 +5,13 @@ set -e
 make assignment.zip
 
 # check if public repo is available
-if [ ! -e "public_repo" ] ; then
+if cd public_repo ; then
+    git restore --source=4fdde04756348850bae8f38647dd81a1eba792bf test_assignment
+    ./test_assignment ../assignment.zip --force
+    cd ..
+else
     echo "Reference public repository seems to be missing!"
     echo "Automatically fetch it using './update_public_repo'"
     echo "or manually place it under 'public_repo/' folder."
     exit 1
 fi
-
-# reset public_repo folder to known state (specified by template hash)
-cd public_repo
-git clean -fd
-git reset --hard `cat ../template_hash`
-
-# extract solution
-unzip ../assignment.zip -d assignment
-
-# populate public_repo with files from assignment.zip which are allowd for change
-cd assignment
-for file in `cat ../files_allowed_for_change`
-do
-    cp "$file" "../$file"
-done
-cd ..
-
-# build solution and run tests
-./test
-cd ..
-# rm -rf public_repo

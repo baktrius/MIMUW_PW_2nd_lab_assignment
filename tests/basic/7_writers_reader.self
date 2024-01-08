@@ -1,4 +1,4 @@
-timeout 0.4s ./mimpirun 8 examples_build/writers_reader
+./run_test 0.4s 8 examples_build/writers_reader
 =====================================================================
 Reader received number 6 from process with rank 6
 Reader received number 5 from process with rank 5

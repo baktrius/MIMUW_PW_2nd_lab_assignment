@@ -1,4 +1,4 @@
-timeout 0.4s ./mimpirun 16 examples_build/barrier
+./run_test 0.4s 16 examples_build/barrier
 =====================================================================
 Hello World from process 0 of 16
 Hello World from process 1 of 16

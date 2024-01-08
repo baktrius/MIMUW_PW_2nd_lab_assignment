@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "../mimpi.h"
+#include "test.h"
 
 int main()
 {
@@ -13,9 +14,9 @@ int main()
     char number = '1';
     int const tag = 1;
 
-    assert(MIMPI_ERROR_NO_SUCH_RANK == MIMPI_Send(&number, sizeof(number), world_size + world_rank, tag));
-    assert(MIMPI_ERROR_NO_SUCH_RANK == MIMPI_Recv(&number, sizeof(number), world_size + world_rank, tag));
+    test_assert(MIMPI_ERROR_NO_SUCH_RANK == MIMPI_Send(&number, sizeof(number), world_size + world_rank, tag));
+    test_assert(MIMPI_ERROR_NO_SUCH_RANK == MIMPI_Recv(&number, sizeof(number), world_size + world_rank, tag));
 
     MIMPI_Finalize();
-    return 0;
+    return test_success();
 }

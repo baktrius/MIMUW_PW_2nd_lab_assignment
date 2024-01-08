@@ -3,6 +3,7 @@
 #include <string.h>
 #include "../mimpi.h"
 #include "mimpi_err.h"
+#include "test.h"
 
 char data[21372137];
 
@@ -20,17 +21,17 @@ int main(int argc, char **argv)
         
         ASSERT_MIMPI_OK(MIMPI_Send(data, sizeof(data), 1, tag));
         for (int i = 0; i < sizeof(data); i += 789) {
-            assert(data[789] == 42);
+            test_assert(data[789] == 42);
         }
     }
     else if (world_rank == 1)
     {
         ASSERT_MIMPI_OK(MIMPI_Recv(data, sizeof(data), 0, tag));
         for (int i = 0; i < sizeof(data); i += 789) {
-            assert(data[789] == 42);
+            test_assert(data[789] == 42);
         }
     }
 
     MIMPI_Finalize();
-    return 0;
+    return test_success();
 }

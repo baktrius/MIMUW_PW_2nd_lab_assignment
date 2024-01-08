@@ -3,7 +3,7 @@
 Testy zawarte w tym katalogu sprawdzają rozwiązanie pod kątem efektywnej implementacji funkcji grupowych
 jak wyspecyfikowano w pliku `assignment.md`.
 
-Dozwolone czasy wykonania (limit `timeout`) zapewnionych testów wynika z formuły z treści $3\left \lceil\log_2(n+1)-1 \right \rceil t+\epsilon$,
+Dozwolone czasy wykonania (limit `timeout`) zapewnionych testów wynika z formuły z treści $\lceil w / 256 \rceil(3\left \lceil\log_2(n+1)-1 \right \rceil t+\epsilon)$,
 w której:
 
 - liczba procesów $n$ to `3,15` albo `16` w zależności od testu
@@ -11,6 +11,7 @@ w której:
 - opóźnione są jednie odczyty (wywołania funkcji `chsend`) o `100ms` albo `50ms`.
   Zatem $t$ najdłuższy czas przesłania pojedynczej wiadomości (wysłanie + odczyt)
   to każdorazowo czas wysłania.
+- $w$ - wielkość wiadomości to $1$
 
 Warto zwrócić uwagę, że treść zadania `assignment.md` specyfikuje, że
 wiadomości przesyłane z użyciem `chsend` przy wymienianiu małych danych powinny być odpowiednio małe.

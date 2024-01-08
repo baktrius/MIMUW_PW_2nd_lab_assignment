@@ -23,7 +23,7 @@ shouldn't observably differ in any way other than execution duration.
             fprintf(                                                                         \
                 stderr,                                                                      \
                 "ERROR: Failed: %s\n\tIn function %s() in %s line %d.\n\tErrno: (%d; %s)\n", \
-                #expr, __func__, __FILE__, __LINE__, errno, strerror(errno)                  \
+                #expr, __func__, __FILE__, __LINE__, _errno, strerror(_errno)                  \
             );                                                                               \
     } while(0)
 
@@ -51,8 +51,8 @@ static int msleep(long msec)
     return res;
 }
 
-#define WRITE_VAR "MIMPI_WRITE_DELAY"
-#define READ_VAR "MIMPI_READ_DELAY"
+#define WRITE_VAR "CHANNELS_WRITE_DELAY"
+#define READ_VAR "CHANNELS_READ_DELAY"
 #define ATOMIC_BLOCK_SIZE 512
 
 pthread_mutex_t mutex;
@@ -67,7 +67,7 @@ static void delay(const char *delay_var, const size_t size)
         int delay_ms = atoi(delay_str);
         if (delay_ms > 0)
         {
-            msleep(delay_ms * (size + ATOMIC_BLOCK_SIZE - 1) / ATOMIC_BLOCK_SIZE);
+            msleep((size + ATOMIC_BLOCK_SIZE - 1) / ATOMIC_BLOCK_SIZE * delay_ms);
         }
     }
     // Defaults to not wait

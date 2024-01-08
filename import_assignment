@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+# extract solution
+unzip "$1" -d assignment
+
+# populate public_repo with files from assignment.zip which are allowed for change
+cd assignment
+for file in `cat ../files_allowed_for_change`
+do
+    cp "$file" "../$file"
+done
+cd ..
