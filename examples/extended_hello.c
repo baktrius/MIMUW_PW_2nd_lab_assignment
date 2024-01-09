@@ -48,6 +48,7 @@ int main(int argc, char **argv)
     for(int i=0; i<argc; i++){
         printf("%dth arg: %s\n", i, argv[i]);
     }
+    fflush(stdout);
 
     MIMPI_Finalize();
     return test_success();
