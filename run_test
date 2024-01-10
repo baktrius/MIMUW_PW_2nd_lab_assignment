@@ -32,15 +32,13 @@ else
     TIMEOUT=$(echo "$TIMEOUT * 20" | bc)
 
     if [ $(echo "$TIMEOUT > 1000" | bc) = "1" ] ; then
-        echo "SKIPPING TEST::TO LONG" >&2
+        echo "SKIPPING TEST::TOO LONG" >&2
         exit 0
     fi
 
-    timeout "$TIMEOUT" valgrind --track-origins=yes --trace-children=yes --track-fds=yes --leak-check=full --show-leak-kinds=all ./mimpirun "$NUM_OF_WORKERS" "$@" 2> "$tmp_file" || true
+    timeout "$TIMEOUT" valgrind -q --track-origins=yes --trace-children=yes --track-fds=yes --leak-check=full --show-leak-kinds=all ./mimpirun "$NUM_OF_WORKERS" "$@" 2> "$tmp_file" || true
     NUM_OF_PROGRAMS=$(($NUM_OF_WORKERS+1))
-    test "$(grep -c 'FILE DESCRIPTORS: 3 open (3 std) at exit.' "$tmp_file")" -ne "$NUM_OF_PROGRAMS" && result=4
-    test "$(grep -c 'All heap blocks were freed -- no leaks are possible' "$tmp_file")" -ne "$NUM_OF_PROGRAMS" && result=5
-    test "$(grep -c 'ERROR SUMMARY: 0 errors from 0 contexts' "$tmp_file")" -ne "$NUM_OF_PROGRAMS" && result=6
+    test "$(grep -c '==' "$tmp_file")" -ne "0" && result=4
 fi
 
 

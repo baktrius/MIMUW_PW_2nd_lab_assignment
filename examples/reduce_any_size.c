@@ -49,7 +49,7 @@ int main(int argc, char **argv)
         }
         free(data_s);
         free(data);
-        printf("DONE! recived %d bytes.\n", size);
+        printf("DONE! received %d bytes.\n", size);
     }
 
     MIMPI_Finalize();
