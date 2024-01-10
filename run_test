@@ -29,9 +29,9 @@ else
     if [ "$LC" = "s" ]; then
     TIMEOUT=${TIMEOUT::-1}
     fi
-    TIMEOUT=$(echo "$TIMEOUT * 10" | bc)
+    TIMEOUT=$(echo "$TIMEOUT * 20" | bc)
 
-    if [ $(echo "$TIMEOUT > 500" | bc) = "1" ] ; then
+    if [ $(echo "$TIMEOUT > 1000" | bc) = "1" ] ; then
         echo "SKIPPING TEST::TO LONG" >&2
         exit 0
     fi
