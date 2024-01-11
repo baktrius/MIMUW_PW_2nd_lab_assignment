@@ -18,9 +18,30 @@ tmp_file=$(mktemp)
 
 # Invoke mimpirun with appropriate timeout and arguments
 # "|| true" used to ignore ./mimpirun return code
-timeout "$TIMEOUT" ./mimpirun "$NUM_OF_WORKERS" "$@" 2> "$tmp_file" || true
 
 result=0
+
+if [ -z ${VALGRIND+x} ]; then
+    timeout "$TIMEOUT" ./mimpirun "$NUM_OF_WORKERS" "$@" 2> "$tmp_file" || true
+else
+
+    LC="${TIMEOUT: -1}"
+    if [ "$LC" = "s" ]; then
+    TIMEOUT=${TIMEOUT::-1}
+    fi
+    TIMEOUT=$(echo "$TIMEOUT * 20" | bc)
+
+    if [ $(echo "$TIMEOUT > 1000" | bc) = "1" ] ; then
+        echo "SKIPPING TEST::TOO LONG" >&2
+        exit 0
+    fi
+
+    timeout "$TIMEOUT" valgrind -q --track-origins=yes --trace-children=yes --track-fds=yes --leak-check=full --show-leak-kinds=all ./mimpirun "$NUM_OF_WORKERS" "$@" 2> "$tmp_file" || true
+    NUM_OF_PROGRAMS=$(($NUM_OF_WORKERS+1))
+    test "$(grep -c '==' "$tmp_file")" -ne "0" && result=4
+fi
+
+
 
 # Check if all workers finished successfully
 # - num of <<success>> is equal to number of created workers
