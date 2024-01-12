@@ -6,13 +6,13 @@
 #include "../mimpi.h"
 #include "mimpi_err.h"
 
+int data[1000000];
 int main(int argc, char **argv)
 {
     MIMPI_Init(true);
 
     int const world_rank = MIMPI_World_rank();
     int partner_rank = (world_rank / 2 * 2) + 1 - world_rank % 2;
-    int data[1000000];
     memset(data, 42, sizeof(data));
     
     if (world_rank == 0) {
