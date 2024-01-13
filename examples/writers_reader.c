@@ -9,6 +9,7 @@ Refers to <usprawnienie2> TODO: przenazwać to.
 #include <assert.h>
 #include "../mimpi.h"
 #include "mimpi_err.h"
+#include "test.h"
 
 int main(int argc, char **argv)
 {
@@ -51,5 +52,5 @@ int main(int argc, char **argv)
     }
 
     MIMPI_Finalize();
-    return 0;
+    return test_success();
 }

@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "../mimpi.h"
 #include "mimpi_err.h"
+#include "test.h"
 
 #define DESCRIPTOR_FROM_ABOVE 7
 #define MSG "Process 1 received number from process 0\n"
@@ -36,5 +37,5 @@ int main(int argc, char **argv)
     }
 
     MIMPI_Finalize();
-    return 0;
+    return test_success();
 }
